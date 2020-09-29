@@ -5,31 +5,48 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
-import java.util.Collections;
 import java.util.Comparator;
 
 
 class WorkingWithFiles {
 
-     public File create() {
-         File newFile = new File("C:\\Users\\lizzn\\IdeaProjects\\test\\words.txt"); //creating new file
+
+     public File choice() {
+         System.out.println("Please, enter path to your file");
          try
-             {
-                 boolean created = newFile.createNewFile();
-                 if(created)
-                     System.out.println("File has been created");
-             }
-             catch(IOException ex){
-                 System.out.println(ex.getMessage());
-             }
-         return newFile;
+         {
+             Scanner in = new Scanner(System.in);
+             String path = in.nextLine();
+             File newFile = new File(path); //opening new file
+
+             // C:\\Users\\lizzn\\IdeaProjects\\system programming (lab 1)\\hello.txt
+
+             boolean chosen = newFile.isFile();
+             if(chosen)
+                 System.out.println("File exists");
+             else
+                 throw new SecurityException("File doesn`t exist: " + path);
+
+             return newFile;
+         }
+         catch(SecurityException ex){
+             System.out.println(ex.getMessage());
+         }
+         catch (Exception ex){
+            System.out.println("Wow - " + ex.getMessage());
+         }
+         return null;
      }
 
      public  List<String> read(File newFile) throws IOException {
-        //Scanner input = new Scanner(new File ("words.txt"));
-        //FileReader read = new FileReader("words.txt");
-        List<String> words = Files.readAllLines(Paths.get("words.txt"), StandardCharsets.UTF_8); //считка
+         System.out.println("Original text:");
+        if(newFile == null){
+            return null;
+        }
+        String file_name = newFile.getName();
+        List<String> words = Files.readAllLines(Paths.get(file_name), StandardCharsets.UTF_8); //считка//
         System.out.println(words);
+
         words.size();
         return words;
     }
@@ -47,7 +64,7 @@ class Formatting {
                 }
             }
         }
-        System.out.println(all_words);
+        //System.out.println(all_words);
         return all_words;
     }
 
@@ -73,7 +90,6 @@ class Formatting {
             }
         }
         );
-
         return all_words;
     }
 
@@ -83,27 +99,25 @@ class Formatting {
             while (all_words.get(i).equals(all_words.get(i + 1))){
                 all_words.remove(i);
             }
-
-            /*while (!all_words.get(i).equals(all_words.get(i + 1))){
-                all_words_new.add(all_words.get(i));
-            }*/
         }
         return all_words;
     }
 }
 
-
 public class Main {
 
     public static void main(String[] args) throws IOException {
+        List<String> lines = null;
         WorkingWithFiles random_text = new WorkingWithFiles();
         Formatting formatting = new Formatting();
-
-        List<String> lines = random_text.read(random_text.create());
+        while(lines == null){
+            lines = random_text.read(random_text.choice());
+        }
 
         ArrayList<String> filteredLines = formatting.correct_length(formatting.filter(lines));
         filteredLines = formatting.delete_dublicates(formatting.sort(filteredLines));
 
+        System.out.println("Formatted and sorted by length:");
         System.out.println(filteredLines);
     }
 }
