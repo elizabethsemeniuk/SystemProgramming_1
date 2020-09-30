@@ -17,9 +17,9 @@ class WorkingWithFiles {
          {
              Scanner in = new Scanner(System.in);
              String path = in.nextLine();
-             File newFile = new File(path); //opening new file
+             File newFile = new File(path.trim()); //opening new file
 
-             // C:\\Users\\lizzn\\IdeaProjects\\system programming (lab 1)\\hello.txt
+             // C:\\Users\\lizzn\\IdeaProjects\\system programming (lab 1)\\input.txt
 
              boolean chosen = newFile.isFile();
              if(chosen)
